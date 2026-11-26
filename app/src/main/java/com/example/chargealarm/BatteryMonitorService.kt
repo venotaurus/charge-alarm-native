@@ -16,6 +16,7 @@ import android.os.BatteryManager
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 
 class BatteryMonitorService : Service() {
 
@@ -72,7 +73,12 @@ class BatteryMonitorService : Service() {
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, buildNotification("Monitoring battery — Target: $targetPercent%"))
 
-        registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        ContextCompat.registerReceiver(
+            this,
+            batteryReceiver,
+            IntentFilter(Intent.ACTION_BATTERY_CHANGED),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
         return START_STICKY
     }
 
